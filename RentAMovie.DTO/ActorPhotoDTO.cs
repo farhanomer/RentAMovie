@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentAMovieDTO
+namespace RentAMovie.DTO
 {
-    public class ActorPhotoDTO 
+    public class ActorPhotoDTO
     {
         public int Id { get; set; }
         public bool IsDefaultPhoto { get; set; }

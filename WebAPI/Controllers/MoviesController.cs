@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RentAModel.DataAccess.UnitofWork;
-using RentAMovieDTO;
-using WebAPI.Controllers;
+using RentAMovie.DTO;
+
 
 namespace RentAMovie.WebAPI.Controllers
 {
@@ -44,7 +45,10 @@ namespace RentAMovie.WebAPI.Controllers
                 return StatusCode(500, "Internal Server Error. Please try again later.");
             }
         }
+
+        
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetMvoie(int id)
         {
             try
@@ -54,7 +58,7 @@ namespace RentAMovie.WebAPI.Controllers
                 _includes.Add("MovieCopyList");
                 _includes.Add("MovieRentList");
                 _includes.Add("MovieCharacterList");
-                var movie = await _unitofWork.MoviesListRepository.Find(m=>m.Id==id,includes:_includes);
+                var movie = await _unitofWork.MovieRepository.Find(m=>m.Id==id,includes:_includes);
                 var result = _mapper.Map<MovieDTO>(movie);
                 return Ok(result);
             }

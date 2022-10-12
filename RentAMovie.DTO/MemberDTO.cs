@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentAMovieDTO
+namespace RentAMovie.DTO
 {
     public class MemberDTO
     {
@@ -20,7 +20,7 @@ namespace RentAMovieDTO
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [StringLength(15,ErrorMessage ="YOu Password is ")]
+        [StringLength(15, ErrorMessage = "YOu Password is ")]
         public string Password { get; set; }
         public string Address { get; set; }
         [Required]

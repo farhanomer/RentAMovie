@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RentAModel.DataAccess\RentAModel.DataAccess.csproj" />
     <ProjectReference Include="..\RentAMovie.DTO\RentAMovie.DTO.csproj" />
+    <ProjectReference Include="..\RentAMovie.Services\RentAMovie.Services.csproj" />
   </ItemGroup>
 
 </Project>

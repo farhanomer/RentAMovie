@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RentAMovieDTO
+namespace RentAMovie.DTO
 {
-    public class ActorDTO 
+    public class ActorDTO
     {
         public int Id;
         [Required]

@@ -1,4 +1,4 @@
-namespace WebAPI
+namespace RentAMovie.WebAPI
 {
     public class WeatherForecast
     {

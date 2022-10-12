@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RentAModel.DataAccess.UnitofWork;
+using RentAMovie.DTO;
 using RentAMovie.Models;
-using RentAMovieDTO;
+using RentAMovie.Services.Interfaces;
 
 namespace RentAMovie.WebAPI.Controllers
 {
@@ -16,12 +17,15 @@ namespace RentAMovie.WebAPI.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly UserManager<Member> _userManager;
         private readonly IUnitofWork _unitofWork;
-        public AccountsController(IMapper mapper, ILogger<AccountsController> logger, UserManager<Member> userManager, IUnitofWork unitofWork)
+        private readonly IAuthManager _authManager; 
+        public AccountsController(IMapper mapper, ILogger<AccountsController> logger, UserManager<Member> userManager, IUnitofWork unitofWork, IAuthManager authManager)
         {
             _mapper = mapper;
             _logger = logger;
             _userManager = userManager;
             _unitofWork = unitofWork;
+            _authManager = authManager;
+
         }
         [HttpPost]
         [Route("Register")]
@@ -58,28 +62,32 @@ namespace RentAMovie.WebAPI.Controllers
             return BadRequest();
             
         }
-        //[HttpPost]
-        //[Route("Login")]
-        //public async Task<IActionResult> Login([FromBody] SignInDTO signInDTO)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var result = await _signInManager.PasswordSignInAsync(signInDTO.Email, signInDTO.Password, false, false);
-        //            if (result.Succeeded)
-        //            {
-        //                return Accepted();
-        //            }
-        //            return Unauthorized(signInDTO);
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            _logger.LogError(ex, "An error has been occured while singing in user");
-        //            return StatusCode(500, "An error occured while signing in user");
-        //        }
-        //    }
-        //    return Problem("", statusCode: 500);
-        //}
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] SignInDTO signInDTO)
+        {
+            _logger.LogInformation($"Login Attempt for {signInDTO.Email}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            { 
+                try
+                {
+                    var result = await _authManager.ValidateUser(signInDTO);
+                    if (!await _authManager.ValidateUser(signInDTO))
+                    {
+                        return Unauthorized();
+                    }
+                    return Accepted(new { Token = await _authManager.CreateToken()});
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error has been occured while singing in user");
+                    return StatusCode(500, "An error occured while signing in user");
+                }
+            }
+            return Problem("Invalid login information", statusCode: 500);
+        }
     }
 }

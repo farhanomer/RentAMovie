@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using RentAMovie.Models;
-using RentAMovieDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -26,7 +26,6 @@ namespace RentAModel.DataAccess.UnitofWork
         private IGenericRepository<MovieRent> _movieRentRepository;
         private IGenericRepository<MovieRental> _movieRentalRepository;
         private IGenericRepository<MovieRole> _movieRoleRepository;
-        IMovieRepository _moviesListRepository;
         public UnitofWork(RentAMovieDbCotext context)
         {
             _context = context;
@@ -58,8 +57,6 @@ namespace RentAModel.DataAccess.UnitofWork
         public IGenericRepository<MovieRental> MovieRentalRepository => _movieRentalRepository ??= new GenericRepository<MovieRental>(_context);
 
         public IGenericRepository<MovieRole> MovieRoleRepository => _movieRoleRepository ??= new GenericRepository<MovieRole>(_context);
-
-        public IMovieRepository MoviesListRepository => _moviesListRepository ??= new MovieRepository(_context);
 
         public void Dispose()
         {

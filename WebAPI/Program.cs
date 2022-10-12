@@ -6,6 +6,8 @@ using RentAModel.DataAccess;
 using RentAModel.DataAccess.UnitofWork;
 using RentAMovie.DTO.Configuration;
 using RentAMovie.Models;
+using RentAMovie.Services.Implementations;
+using RentAMovie.Services.Interfaces;
 using RentAMovie.WebAPI;
 using Serilog;
 using Serilog.Events;
@@ -37,8 +39,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 builder.Services.AddTransient<IUnitofWork, UnitofWork>();
-builder.Services.AddAuthentication();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(Configuration);
+
 builder.Host.UseSerilog();
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
@@ -65,13 +70,15 @@ using (var scope = app.Services.CreateScope())
     context = scope.ServiceProvider.GetRequiredService<RentAMovieDbCotext>();
     await context.Database.MigrateAsync();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Member>>();
-    await RentAMovieInitializer.SeedData(context,userManager);
+    await RentAMovieInitializer.SeedData(context, userManager);
 }
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSerilogRequestLogging();
 try
 {
     Log.Information("Application is Starting");

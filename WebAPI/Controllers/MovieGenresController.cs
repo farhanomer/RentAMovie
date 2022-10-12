@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RentAModel.DataAccess.UnitofWork;
-using RentAMovieDTO;
+using RentAMovie.DTO;
 
 namespace RentAMovie.WebAPI.Controllers
 {

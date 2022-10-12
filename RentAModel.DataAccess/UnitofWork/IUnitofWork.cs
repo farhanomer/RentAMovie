@@ -24,7 +24,6 @@ namespace RentAModel.DataAccess.UnitofWork
         IGenericRepository<MovieRent> MovieRentRepository { get; }
         IGenericRepository<MovieRental> MovieRentalRepository { get; }
         IGenericRepository<MovieRole> MovieRoleRepository { get; }
-        IMovieRepository MoviesListRepository { get; }
         Task Save();
     }
 }
